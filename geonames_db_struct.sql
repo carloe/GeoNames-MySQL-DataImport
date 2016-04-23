@@ -1,4 +1,4 @@
--- DROP DATABASE IF EXISTS geonames; 
+-- DROP DATABASE IF EXISTS geonames;
 -- CREATE DATABASE geonames DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 -- USE geonames;
 
@@ -123,6 +123,8 @@ CREATE TABLE `geoname` (
   KEY `population` (`population`),
   KEY `elevation` (`elevation`),
   KEY `timezone` (`timezone`)
+  KEY `alternatenames` (`alternatenames`)
+  FULLTEXT (`name`,`alternatenames`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
 
 -- Create syntax for TABLE 'hierarchy'
