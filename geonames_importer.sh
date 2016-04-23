@@ -4,7 +4,7 @@
 dbhost="localhost"
 dbport=3306
 dbname="geonames"
-#dir=$( cd "$( dirname "$0" )" && pwd )
+dir=`pwd`
 
 download_folder="`pwd`/download"
 
@@ -48,7 +48,7 @@ download_geonames_data() {
         wget -c -P "$download_folder" http://download.geonames.org/export/dump/$dump
     done
     for zip in $zip_codes; do
-        wget -c -P "$download_folder" -O "${zip:0:(-4)}_zip.zip" http://download.geonames.org/export/zip/$zip
+      wget -c -P "$download_folder" -O "${zip:0:${#zip} - 4}_zip.zip" http://download.geonames.org/export/zip/$zip
     done
     unzip "*_zip.zip" -d ./zip
     rm *_zip.zip
