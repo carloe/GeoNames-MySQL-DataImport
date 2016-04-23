@@ -40,12 +40,12 @@ usage() {
 }
 
 download_geonames_data() {
-	echo "Downloading GeoNames.org data..." 
+	echo "Downloading GeoNames.org data..."
     download_folder="$1"
     dumps="allCountries.zip alternateNames.zip hierarchy.zip admin1CodesASCII.txt admin2Codes.txt featureCodes_en.txt timeZones.txt countryInfo.txt"
-    zip_codes="allCountries.zip"
+		zip_codes="allCountries.zip"
     for dump in $dumps; do
-        wget -c -P "$download_folder" http://download.geonames.org/export/dump/$dump
+          wget -c -P "$download_folder" http://download.geonames.org/export/dump/$dump
     done
     for zip in $zip_codes; do
       wget -c -P "$download_folder" -O "${zip:0:${#zip} - 4}_zip.zip" http://download.geonames.org/export/zip/$zip
@@ -78,7 +78,7 @@ fi
 
 # Deals with operation mode 2 (Database issues...)
 # Parses command line parameters.
-while getopts "a:u:p:h:r:n:" opt; 
+while getopts "a:u:p:h:r:n:" opt;
 do
     case $opt in
         a) action=$OPTARG ;;
@@ -120,34 +120,34 @@ case "$action" in
     create-db)
         echo "Creating database $dbname..."
         mysql -h $dbhost -P $dbport -u $dbusername -p$dbpassword -Bse "DROP DATABASE IF EXISTS $dbname;"
-        mysql -h $dbhost -P $dbport -u $dbusername -p$dbpassword -Bse "CREATE DATABASE $dbname DEFAULT CHARACTER SET utf8;" 
-        mysql -h $dbhost -P $dbport -u $dbusername -p$dbpassword -Bse "USE $dbname;" 
+        mysql -h $dbhost -P $dbport -u $dbusername -p$dbpassword -Bse "CREATE DATABASE $dbname DEFAULT CHARACTER SET utf8;"
+        mysql -h $dbhost -P $dbport -u $dbusername -p$dbpassword -Bse "USE $dbname;"
         mysql -h $dbhost -P $dbport -u $dbusername -p$dbpassword $dbname < $dir/geonames_db_struct.sql
     ;;
-        
+
     create-tables)
         echo "Creating tables for database $dbname..."
-        mysql -h $dbhost -P $dbport -u $dbusername -p$dbpassword -Bse "USE $dbname;" 
+        mysql -h $dbhost -P $dbport -u $dbusername -p$dbpassword -Bse "USE $dbname;"
         mysql -h $dbhost -P $dbport -u $dbusername -p$dbpassword $dbname < $dir/geonames_db_struct.sql
     ;;
-    
+
     import-dumps)
         echo "Importing geonames dumps into database $dbname"
         mysql -h $dbhost -P $dbport -u $dbusername -p$dbpassword --local-infile=1 $dbname < $dir/geonames_import_data.sql
-    ;;    
-    
+    ;;
+
     drop-db)
         echo "Dropping $dbname database"
         mysql -h $dbhost -P $dbport -u $dbusername -p$dbpassword -Bse "DROP DATABASE IF EXISTS $dbname;"
     ;;
-        
+
     truncate-db)
         echo "Truncating \"geonames\" database"
         mysql -h $dbhost -P $dbport -u $dbusername -p$dbpassword $dbname < $dir/geonames_truncate_db.sql
     ;;
 esac
 
-if [ $? == 0 ]; then 
+if [ $? == 0 ]; then
 	echo "[OK]"
 else
 	echo "[FAILED]"
